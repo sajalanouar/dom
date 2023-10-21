@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shopping Cart</title>
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #cart {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .remove-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        .like-button {
+            color: grey;
+            cursor: pointer;
+        }
+        .like-button.active {
+            color: red;
+        }
+        footer {
+            text-align: center;
+            background-color: #f2f2f2;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="cart">
+        <h2>Shopping Cart</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Like</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Product 1</td>
+                    <td>$10.00</td>
+                    <td>
+                        <button onclick="decreaseQuantity(1)">-</button>
+                        <span id="quantity1">1</span>
+                        <button onclick="increaseQuantity(1)">+</button>
+                    </td>
+                    <td><i class="like-button fas fa-heart" onclick="toggleLike(1)"></i></td>
+                    <td><button class="remove-button" onclick="removeItem(1)">Remove</button></td>
+                </tr>
+                <tr>
+                    <td>Product 2</td>
+                    <td>$20.00</td>
+                    <td>
+                        <button onclick="decreaseQuantity(2)">-</button>
+                        <span id="quantity2">2</span>
+                        <button onclick="increaseQuantity(2)">+</button>
+                    </td>
+                    <td><i class="like-button fas fa-heart" onclick="toggleLike(2)"></i></td>
+                    <td><button class="remove-button" onclick="removeItem(2)">Remove</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Total Price: <span id="totalPrice">$50.00</span></p>
+    </div>
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Moatassem Shopping Cart</p>
+        </div>
+    </footer>
+
+    <script>
+        const prices = {
+            1: 10.00,
+            2: 20.00
+        };
+        const quantities = {
+            1: 1,
+            2: 2
+        };
+        const likes = {
+            1: false,
+            2: false
+        };
+
+        // Update the total price and display it
+        function updateTotalPrice() {
+            let total = 0;
+            for (const itemId in quantities) {
+                if (quantities[itemId] > 0) {
+                    total += prices[itemId] * quantities[itemId];
+                }
+            }
+            document.getElementById("totalPrice").textContent = "$" + total.toFixed(2);
+        }
+
+        // Increase the quantity of an item
+        function increaseQuantity(itemId) {
+            quantities[itemId]++;
+            document.getElementById("quantity" + itemId).textContent = quantities[itemId];
+            updateTotalPrice();
+        }
+
+        // Decrease the quantity of an item
+        function decreaseQuantity(itemId) {
+            if (quantities[itemId] > 0) {
+                quantities[itemId]--;
+                document.getElementById("quantity" + itemId).textContent = quantities[itemId];
+                updateTotalPrice();
+            }
+        }
+
+        // Remove an item from the cart
+        function removeItem(itemId) {
+            quantities[itemId] = 0;
+            document.getElementById("quantity" + itemId).textContent = quantities[itemId];
+            updateTotalPrice();
+        }
+
+        // Toggle liking an item
+        function toggleLike(itemId) {
+            likes[itemId] = !likes[itemId];
+            const likeButton = document.querySelector(`.like-button[data-itemid="${itemId}"`);
+            likeButton.classList.toggle('active', likes[itemId]);
+        }
+
+        // Initialize the total price
+        updateTotalPrice();
+    </script>
+</body>
+</html>
